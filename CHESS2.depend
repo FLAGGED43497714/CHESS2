@@ -1,0 +1,41 @@
+# depslib dependency file v1.0
+1648468640 source:c:\users\balth\c++\chesconstest1\chess2\main.cpp
+	<iostream>
+	<bitset>
+	<string>
+	<vector>
+	"coutBoard.h"
+	"initBoard.h"
+	"LegalMoves.h"
+
+1648061924 c:\users\balth\c++\chesconstest1\chess2\include\coutboard.h
+	<bitset>
+
+1648412494 source:c:\users\balth\c++\chesconstest1\chess2\src\coutboard.cpp
+	"coutBoard.h"
+	<bitset>
+	<iostream>
+
+1648057258 source:c:\users\balth\c++\chesconstest1\chess2\src\initboard.cpp
+	"initBoard.h"
+	<vector>
+	<bitset>
+	<string>
+	<iostream>
+
+1648054677 c:\users\balth\c++\chesconstest1\chess2\include\initboard.h
+	<bitset>
+	<string>
+
+1648416353 source:c:\users\balth\c++\chesconstest1\chess2\src\legalmoves.cpp
+	"LegalMoves.h"
+	"coutBoard.h"
+	<vector>
+	<bitset>
+	<string>
+	<iostream>
+
+1648468568 c:\users\balth\c++\chesconstest1\chess2\include\legalmoves.h
+	<vector>
+	<bitset>
+

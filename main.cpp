@@ -1,54 +1,83 @@
-#include <iostream>
-#include <bitset>
-#include <string>
-#include <vector>
-
-#include "coutBoard.h"
+#include "Game.h"
 #include "initBoard.h"
+#include "MakeMove.h"
 #include "LegalMoves.h"
+#include "coutBoard.h"
+#include "BitwiseFunction.h"
+#include "SqNameToNb.h"
+#include "Eval.h"
+
+#include <string>
+#include <iostream>
+#include <vector>
+#include <bitset>
+#include <unordered_map>
+
+
 
 
 int main()
 {
 
-    std::bitset<64> r,n,b,q,k,p,R,N,B,Q,K,P;
 
-    std::bitset<64> enPassant("0000000000000000000000000000000000000000000000000000000000000000");
+    /*std::unordered_map<unsigned long long int, int> ump ;
+    std::unordered_map<unsigned long long int, int>::iterator it ;
 
-    //std::string fen = "7Q/pp1R4/1kp1B3/8/1P6/8/P1P3PK/8" ;
-    //std::string fen = "8/4p3/8/1PP1r1P1/8/8/8/8" ;
-    std::string fen = "rnbqkbnr/1p2p1p1/2pp4/pP2Pp2/7p/5N2/P1PP1PPP/RNBQKB1R" ;
+    ump.insert(std::pair<unsigned long long int, int>(1, 100));
+    ump.insert(std::pair<unsigned long long int, int>(1, 22));
 
-    //std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" ;
+    it = ump.find(1); //Finding an element
 
-    initFromFEN(fen,r,n,b,q,k,p,R,N,B,Q,K,P) ;
+    if(it == ump.end())
+        std::cout <<std::endl<< "Key-value pair not present in hash map" ;
+    else
+        std::cout <<std::endl<< "Key-value pair present : "
+          << it->first << "->" << it->second ;*/
 
-    //coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P);
+    /*std::string nothing ;
 
-    std::bitset<64> occupied ;
-    std::bitset<64> blackPieces ;
-    std::bitset<64> whitePieces ;
+    unsigned long long int r,n,b,q,k,p,R,N,B,Q,K,P;
 
+    std::string zero = "8/8/8/8/8/8/8/8" ;
+    std::string fen = "rr3k3/pQp1np2/8/3Pn3/8/5qr1/5N1P/6KR" ;
 
-    occupied = r | n | b | q | k | p | R | N | B | Q | K | P ;
-
-    blackPieces = r | n | b | q | k | p ;
-    whitePieces = R | N | B | Q | K | P ;
-
-    std::vector<int> moves ;
-
-    /* En passant :
-    Faire l'update après chaque moves*/
+    initFromFEN(zero,r,n,b,q,k,p,R,N,B,Q,K,P);
+    initFromFEN(fen,r,n,b,q,k,p,R,N,B,Q,K,P);
 
 
+    bool CstlL = true;
+    bool CstlS = true;
+    bool cstlL = true;
+    bool cstlS = true;
+
+    bool brokeCastleS = false;
+    bool brokeCastleL = false;
+    bool brokecastleS = false;
+    bool brokecastleL = false;
+
+    int pieceCaptured = 0 ;
+    bool wasCastle = false ;
+    bool wasPromote = false ;
 
 
-    //legPaW(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
-    sliderHV(moves, r, blackPieces, whitePieces,occupied);
 
-    for (int k = 0 ; k < moves.size() ; k ++){
-        std::cout << moves[k] << std::endl ;
-    }
+
+
+
+    /*coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
+    std::cin >> nothing ;
+
+
+    Do_move(3,1,CstlL,CstlS,cstlL,cstlL,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle, wasPromote, pieceCaptured) ;
+
+    coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
+    std::cin >> nothing ;
+
+    Undo_move(3,1,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,wasCastle, wasPromote, pieceCaptured,CstlL,CstlS,cstlL,cstlS,r,n,b,q,k,p,R,N,B,Q,K,P);
+    coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
+    std::cin >> nothing ;*/
+
+    Game() ;
 
     return 0;
 }

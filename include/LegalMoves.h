@@ -4,17 +4,31 @@
 #include <vector>
 #include <bitset>
 
-void legPaW (std::vector<int>& moves, std::bitset<64> P,
-             std::bitset<64> whitePieces, std::bitset<64> blackPieces,
-             std::bitset<64> occupied, std::bitset<64> enPassant);
+void legPaW (std::vector<int>& moves, unsigned long long int P,
+             unsigned long long int whitePieces, unsigned long long int blackPieces,
+             unsigned long long int occupied, unsigned long long int enPassant);
 
-void legPaB (std::vector<int>& moves, std::bitset<64> p,
-             std::bitset<64> whitePieces, std::bitset<64> blackPieces,
-             std::bitset<64> occupied, std::bitset<64> enPassant);
+void legPaB (std::vector<int>& moves, unsigned long long int p,
+             unsigned long long int whitePieces, unsigned long long int blackPieces,
+             unsigned long long int occupied, unsigned long long int enPassant);
 
-void sliderHV (std::vector<int>& moves, std::bitset<64> piece,
-             std::bitset<64> allyPieces, std::bitset<64> ennemyPieces,
-             std::bitset<64> occupied);
+void sliderHV (std::vector<int>& moves, unsigned long long int piece,
+             unsigned long long int allyPieces,
+             unsigned long long int occupied);
+
+void sliderD (std::vector<int>& moves, unsigned long long int piece,
+             unsigned long long int allyPieces,
+             unsigned long long int occupied);
+
+void sliderCD (std::vector<int>& moves, unsigned long long int piece,
+         unsigned long long int allyPieces,
+         unsigned long long int occupied);
+
+void KnightMoves(std::vector<int>& moves, unsigned long long int piece,
+         unsigned long long int allyPieces);
+
+void KingMoves(std::vector<int>& moves, unsigned long long int piece, unsigned long long int rook,
+         unsigned long long int allyPieces, unsigned long long int occupied, bool CstlL, bool CstlS, bool cstlL, bool cstlS);
 
 
 #endif // LEGALMOVES_H

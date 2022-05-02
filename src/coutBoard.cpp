@@ -3,7 +3,7 @@
 #include <bitset>
 #include <iostream>
 
-void coutBoard(std::bitset<64> r, std::bitset<64> b, std::bitset<64> n, std::bitset<64> q, std::bitset<64> k, std::bitset<64> p,
+void coutBoard(std::bitset<64> r, std::bitset<64> n, std::bitset<64> b, std::bitset<64> q, std::bitset<64> k, std::bitset<64> p,
           std::bitset<64> R, std::bitset<64> N, std::bitset<64> B, std::bitset<64> Q, std::bitset<64> K, std::bitset<64> P)
 {
     for (int i = 63 ; i >= 0 ; i--){
@@ -58,6 +58,7 @@ void coutBoard(std::bitset<64> r, std::bitset<64> b, std::bitset<64> n, std::bit
             std::cout << "\t" ;
         }
     }
+    std::cout << "\n" ;
 }
 
 
@@ -80,7 +81,6 @@ void coutBitSet(std::bitset<64> b)
             std::cout << "\t" ;
         }
     }
-    std::cout << "\n" ;
     std::cout << "\n" ;
     std::cout << "\n" ;
 }

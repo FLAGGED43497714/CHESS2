@@ -5,73 +5,10 @@
 #include <string>
 #include <iostream>
 
-void initBoard(std::bitset<64> board[12])
-{
-
-    std::bitset<64> r("1000000100000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> n("0100001000000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> b("0010010000000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> q("0001000000000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> k("0000100000000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> p("0000000011111111000000000000000000000000000000000000000000000000");
-    std::bitset<64> R("0000000000000000000000000000000000000000000000000000000010000001");
-    std::bitset<64> N("0000000000000000000000000000000000000000000000000000000001000010");
-    std::bitset<64> B("0000000000000000000000000000000000000000000000000000000000100100");
-    std::bitset<64> Q("0000000000000000000000000000000000000000000000000000000000010000");
-    std::bitset<64> K("0000000000000000000000000000000000000000000000000000000000001000");
-    std::bitset<64> P("0000000000000000000000000000000000000000000000001111111100000000");
-
-    board[0] = r;
-    board[1] = n;
-    board[2] = b;
-    board[3] = q;
-    board[4] = k;
-    board[5] = p;
-    board[6] = R;
-    board[7] = N;
-    board[8] = B;
-    board[9] = Q;
-    board[10] = K;
-    board[11] = P;
-
-}
-
-void initBoard2(std::bitset<64>& r,std::bitset<64>& n,std::bitset<64>& b,std::bitset<64>& q,std::bitset<64>& k,
-                std::bitset<64>& p,std::bitset<64>& R,std::bitset<64>& N,std::bitset<64>& B,std::bitset<64>& Q,
-                std::bitset<64>& K,std::bitset<64>& P)
-{
-
-    std::bitset<64> r1("1000000100000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> n1("0100001000000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> b1("0010010000000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> q1("0001000000000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> k1("0000100000000000000000000000000000000000000000000000000000000000");
-    std::bitset<64> p1("0000000011111111000000000000000000000000000000000000000000000000");
-    std::bitset<64> R1("0000000000000000000000000000000000000000000000000000000010000001");
-    std::bitset<64> N1("0000000000000000000000000000000000000000000000000000000001000010");
-    std::bitset<64> B1("0000000000000000000000000000000000000000000000000000000000100100");
-    std::bitset<64> Q1("0000000000000000000000000000000000000000000000000000000000010000");
-    std::bitset<64> K1("0000000000000000000000000000000000000000000000000000000000001000");
-    std::bitset<64> P1("0000000000000000000000000000000000000000000000001111111100000000");
-
-    r = r1;
-    n = n1;
-    b = b1;
-    q = q1;
-    k = k1;
-    p = p1;
-    R = R1;
-    N = N1;
-    B = B1;
-    Q = Q1;
-    K = K1;
-    P = P1;
-
-}
-
-void initFromFEN(std::string fen, std::bitset<64>& r,std::bitset<64>& n,std::bitset<64>& b,std::bitset<64>& q,std::bitset<64>& k,
-                std::bitset<64>& p,std::bitset<64>& R,std::bitset<64>& N,std::bitset<64>& B,std::bitset<64>& Q,
-                std::bitset<64>& K,std::bitset<64>& P)
+void initFromFEN(std::string fen, unsigned long long int& r,unsigned long long int& n,unsigned long long int& b,unsigned long long int& q,
+                unsigned long long int& k,unsigned long long int& p,
+                unsigned long long int& R,unsigned long long int& N,unsigned long long int& B,unsigned long long int& Q,
+                unsigned long long int& K,unsigned long long int& P)
 {
 
     std::string r1String ("0000000000000000000000000000000000000000000000000000000000000000");
@@ -190,17 +127,17 @@ void initFromFEN(std::string fen, std::bitset<64>& r,std::bitset<64>& n,std::bit
     std::bitset<64> K1(K1String);
     std::bitset<64> P1(P1String);
 
-    r = r1;
-    n = n1;
-    b = b1;
-    q = q1;
-    k = k1;
-    p = p1;
-    R = R1;
-    N = N1;
-    B = B1;
-    Q = Q1;
-    K = K1;
-    P = P1;
+    r = r1.to_ullong();
+    n = n1.to_ullong();
+    b = b1.to_ullong();
+    q = q1.to_ullong();
+    k = k1.to_ullong();
+    p = p1.to_ullong();
+    R = R1.to_ullong();
+    N = N1.to_ullong();
+    B = B1.to_ullong();
+    Q = Q1.to_ullong();
+    K = K1.to_ullong();
+    P = P1.to_ullong();
 
 }

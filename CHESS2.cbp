@@ -34,11 +34,27 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/BitwiseFunction.h" />
+		<Unit filename="include/ChoseMove.h" />
+		<Unit filename="include/Constants.h" />
+		<Unit filename="include/Eval.h" />
+		<Unit filename="include/Game.h" />
+		<Unit filename="include/Global.h" />
 		<Unit filename="include/LegalMoves.h" />
+		<Unit filename="include/MakeMove.h" />
+		<Unit filename="include/SqNameToNb.h" />
 		<Unit filename="include/coutBoard.h" />
 		<Unit filename="include/initBoard.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/BitwiseFunction.cpp" />
+		<Unit filename="src/ChoseMove.cpp" />
+		<Unit filename="src/Constants.cpp" />
+		<Unit filename="src/Eval.cpp" />
+		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/Global.cpp" />
 		<Unit filename="src/LegalMoves.cpp" />
+		<Unit filename="src/MakeMove.cpp" />
+		<Unit filename="src/SqNameToNb.cpp" />
 		<Unit filename="src/coutBoard.cpp" />
 		<Unit filename="src/initBoard.cpp" />
 		<Extensions>

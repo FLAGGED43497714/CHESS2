@@ -6,12 +6,14 @@
 
 void initBoard(std::bitset<64> board[12]);
 
-void initBoard2(std::bitset<64>& r,std::bitset<64>& n,std::bitset<64>& b,std::bitset<64>& q,std::bitset<64>& k,
-                std::bitset<64>& p,std::bitset<64>& R,std::bitset<64>& N,std::bitset<64>& B,std::bitset<64>& Q,
-                std::bitset<64>& K,std::bitset<64>& P);
+void initBoard2(unsigned long long int& r,unsigned long long int& n,unsigned long long int& b,unsigned long long int& q,
+                unsigned long long int& k,unsigned long long int& p,
+                unsigned long long int& R,unsigned long long int& N,unsigned long long int& B,unsigned long long int& Q,
+                unsigned long long int& K,unsigned long long int& P);
 
-void initFromFEN(std::string fen, std::bitset<64>& r,std::bitset<64>& n,std::bitset<64>& b,std::bitset<64>& q,std::bitset<64>& k,
-                std::bitset<64>& p,std::bitset<64>& R,std::bitset<64>& N,std::bitset<64>& B,std::bitset<64>& Q,
-                std::bitset<64>& K,std::bitset<64>& P);
+void initFromFEN(std::string fen, unsigned long long int& r,unsigned long long int& n,unsigned long long int& b,unsigned long long int& q,
+                unsigned long long int& k,unsigned long long int& p,
+                unsigned long long int& R,unsigned long long int& N,unsigned long long int& B,unsigned long long int& Q,
+                unsigned long long int& K,unsigned long long int& P);
 
 #endif // INITBOARD_H

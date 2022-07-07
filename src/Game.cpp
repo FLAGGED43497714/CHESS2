@@ -19,9 +19,11 @@
 int GAMEintINFINITY = std::numeric_limits<int>::max() ;
 
 
-void Game(){
+void Game(int depth1, int depth2){
     std::string nothing ;
     //std::cin >> nothing ;
+
+    int depthInit ;
 
     bool verbose = false ;
 
@@ -31,13 +33,6 @@ void Game(){
     unsigned long long int r,n,b,q,k,p,R,N,B,Q,K,P;
 
     std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" ;
-
-    //std::string fen = "8/4p3/5r2/1P4p1/8/7P/8/4P3" ;
-    //std::string fen = "r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R" ; // castle
-    //std::string fen = "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR" ; //scandi
-    //std::string fen = "8/8/3k4/3q4/8/8/8/2QKB3" ;
-    //std::string fen = "1n6/8/8/8/8/8/8/8" ;
-    //std::string fen = "8/5kpp/p2bqp2/1ppQ4/8/P1B4P/1PP3P1/R5K1" ;
 
 
     initFromFEN(fen,r,n,b,q,k,p,R,N,B,Q,K,P) ;
@@ -81,17 +76,34 @@ void Game(){
     int bestEval ;
 
     //move ordering
-    int captInd ;
+    int captInd = 0 ;
+    int captInd2 = 0 ;
+    int captInd3 = 0 ;
+    int captInd4 = 0 ;
+    int captInd5 = 0 ;
     int dest ;
     unsigned long long int destInt ;
     int temp1 ;
     int temp2 ;
+
+    unsigned long long int forbCstlS (0) ; //12
+    unsigned long long int tempForbCstlS ;
+    unsigned long long int forbCstlL (0) ; //24
+    unsigned long long int tempForbCstlL ;
+    unsigned long long int forbcstlS (0) ; //864691128455135232
+    unsigned long long int tempForbcstlS ;
+    unsigned long long int forbcstlL (0) ; //1729382256910270464
+    unsigned long long int tempForbcstlL ;
+
+    unsigned long long int tempassant ;
 
     //extern std::unordered_map<unsigned long long int, int> ump ;
     //extern std::unordered_map<unsigned long long int, int>::iterator it ;
 
 
     while(true){
+
+        depthInit = depth1 ;
         //std::cin >> nothing ;
 
         pieceCaptured = 0 ;
@@ -102,16 +114,21 @@ void Game(){
         brokecastleS = false ;
         brokecastleL = false ;
 
-        enPassant = 0 ; // ATTENTION C'EST UN HOTFIX
+        //enPassant = 0 ; // ATTENTION C'EST UN HOTFIX
 
 
         //std::cin >> nothing ;
         system("cls");
         std::cout << "CstlS " << CstlS << " CstlL "<< CstlL << " cstlS "<< cstlS <<" cstlL "<< cstlL << std::endl ;
+        std::cout << "eval : " << (float) bestEval/100 << std::endl;
         coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-        if (verbose){
-            std::cin >> nothing ;
-        }
+        /*coutBitSet(forbCstlL);
+        coutBitSet(forbCstlS);
+        coutBitSet(forbcstlL);
+        coutBitSet(forbcstlS);
+        std::cin >> nothing ;*/
+
+
         if (!(moveNb%2)){std::cout << "white " ;} else {std::cout << "black " ;}std::cout << "to play" << std::endl;
 
 
@@ -155,7 +172,7 @@ void Game(){
 
                     for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                         if ((moves[2*semIdx] == position) && (moves[2*semIdx+1] == destination)) {
-                            Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle,wasPromote,pieceCaptured);
+                            Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle,wasPromote,pieceCaptured);
                             lastMove.first = position ;
                             lastMove.second = destination ;
                             //isEnPassant(lastMove, enPassant, P, true) ;
@@ -185,6 +202,10 @@ void Game(){
 
 
                 captInd = 0 ;
+                captInd2 = 0 ;
+                captInd3 = 0 ;
+                captInd4 = 0 ;
+                captInd5 = 0 ;
                 for (int semInd = 0 ; semInd < moves.size()/2 ; semInd ++){
                     destInt = 1 ;
                     dest = moves[2*semInd+1] ;
@@ -200,18 +221,88 @@ void Game(){
                         captInd +=1 ;
                     }
                 }
+                for (int semInd = 1 ; semInd < captInd ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(k|q|r|n|b)){
+                        temp1 = moves[2*captInd2] ;
+                        temp2 = moves[2*captInd2+1] ;
+                        moves[2*captInd2] = moves[2*semInd] ;
+                        moves[2*captInd2+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd2 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd2 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(k|q|r)){
+                        temp1 = moves[2*captInd3] ;
+                        temp2 = moves[2*captInd3+1] ;
+                        moves[2*captInd3] = moves[2*semInd] ;
+                        moves[2*captInd3+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd3 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd3 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(k|q)){
+                        temp1 = moves[2*captInd4] ;
+                        temp2 = moves[2*captInd4+1] ;
+                        moves[2*captInd4] = moves[2*semInd] ;
+                        moves[2*captInd4+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd4 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd4 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(k)){
+                        temp1 = moves[2*captInd5] ;
+                        temp2 = moves[2*captInd5+1] ;
+                        moves[2*captInd5] = moves[2*semInd] ;
+                        moves[2*captInd5+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd5 +=1 ;
+                    }
+                }
 
 
 
                 bestInd = 0 ;
                 thisEval = -GAMEintINFINITY ;
                 bestEval = -GAMEintINFINITY ;
+
+                tempassant = enPassant ;
+                tempForbCstlS = forbCstlS ;
+                tempForbCstlL = forbCstlL ;
+                tempForbcstlS = forbcstlS ;
+                tempForbcstlL = forbcstlL ;
+
                 //ump.clear() ;
                 for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                     position = moves[2*semIdx] ;
                     destination = moves[2*semIdx+1] ;
-                    //std::cout << position << std::endl ;
-                    //std::cout << destination << std::endl ;
+
+                    //show moves :
+                    //std::cout << position << " > " << destination << std::endl ;
+
+
                     pieceCaptured = 0 ;
                     wasCastle = false ;
                     wasPromote = false ;
@@ -219,55 +310,36 @@ void Game(){
                     brokeCastleL = false ;
                     brokecastleS = false ;
                     brokecastleL = false ;
-                    //std::cout << "position = " << position << std::endl ;
-                    //std::cout << "destination = " << destination << std::endl ;
-                    //std::cout << "wasCastle = " << wasCastle << std::endl ;
-                    //std::cout << "pieceCaptured = " << pieceCaptured << std::endl ;
 
-                    //std::cout << "before do move : " << pieceCaptured << wasCastle << wasPromote << std::endl;
-                    Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle,wasPromote,pieceCaptured);
-                    //std::cout << "after do move : " << pieceCaptured << wasCastle << wasPromote << std::endl;
-                    if (verbose){
-                        std::cout << "board before minimax " << std::endl ;
-                        coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                        std::cin >> nothing ;
-                    }
-                    //sleep(2) ;
-                    thisEval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,4,5,-GAMEintINFINITY,GAMEintINFINITY,false) ;
+                    Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle,wasPromote,pieceCaptured);
+
+
+
+
+                    thisEval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,forbCstlS,forbCstlL,tempForbcstlS,tempForbcstlL,depthInit,depth1,depth2,-GAMEintINFINITY,GAMEintINFINITY,false) ;
                     //std::cout << thisEval << std::endl ;
-                    if (verbose){
-                            std::cout << "eval = " << thisEval << std::endl ;
-                    }
+
                     if (thisEval > bestEval){
                         bestInd = 2*semIdx ;
                         bestEval = thisEval ;
                     }
-                    if (verbose){std::cin >> nothing ;}
-                    /*
-                    std::cout << "about to undo " << std::endl;
-                    std::cout << "board after minimax " << std::endl ;
-                    std::cout << "position = " << position << std::endl ;
-                    std::cout << "destination = " << destination << std::endl ;
-                    std::cout << "wasCastle = " << wasCastle << std::endl ;
-                    std::cout << "pieceCaptured = " << pieceCaptured << std::endl ;
-                    coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                    */
-                    //sleep(2);
 
-
+                    enPassant = tempassant ;
+                    forbCstlS = tempForbCstlS ;
+                    forbCstlL = tempForbCstlL ;
+                    forbcstlS = tempForbcstlS ;
+                    forbcstlL = tempForbcstlL ;
 
                     Undo_move(position,destination,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,wasCastle,wasPromote,pieceCaptured,CstlL,CstlS,cstlL,cstlS,r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                    if (verbose){
-                        std::cout << "undone move in game() " << std::endl;
-                        coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P);
-                        std::cin >> nothing ;}
+
+
                 }
 
                 for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                     if (2*semIdx == bestInd) {
                         position = moves[2*semIdx] ;
                         destination = moves[2*semIdx+1] ;
-                        Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle,wasPromote,pieceCaptured);
+                        Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle,wasPromote,pieceCaptured);
                         lastMove.first = position ;
                         lastMove.second = destination ;
                         //isEnPassant(lastMove, enPassant, P, true) ;
@@ -330,7 +402,7 @@ void Game(){
 
             for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                 if ((moves[2*semIdx] == position) && (moves[2*semIdx+1] == destination)) {
-                    Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle, wasPromote, pieceCaptured);
+                    Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle, wasPromote, pieceCaptured);
                     legal = true ;
                     lastMove.first = position ;
                     lastMove.second = destination ;
@@ -358,6 +430,10 @@ void Game(){
 
 
                 captInd = 0 ;
+                captInd2 = 0 ;
+                captInd3 = 0 ;
+                captInd4 = 0 ;
+                captInd5 = 0 ;
                 for (int semInd = 0 ; semInd < moves.size()/2 ; semInd ++){
                     destInt = 1 ;
                     dest = moves[2*semInd+1] ;
@@ -373,17 +449,84 @@ void Game(){
                         captInd +=1 ;
                     }
                 }
+                for (int semInd = 1 ; semInd < captInd ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(K|Q|R|N|B)){
+                        temp1 = moves[2*captInd2] ;
+                        temp2 = moves[2*captInd2+1] ;
+                        moves[2*captInd2] = moves[2*semInd] ;
+                        moves[2*captInd2+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd2 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd2 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(K|Q|R)){
+                        temp1 = moves[2*captInd3] ;
+                        temp2 = moves[2*captInd3+1] ;
+                        moves[2*captInd3] = moves[2*semInd] ;
+                        moves[2*captInd3+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd3 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd3 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(K|Q)){
+                        temp1 = moves[2*captInd4] ;
+                        temp2 = moves[2*captInd4+1] ;
+                        moves[2*captInd4] = moves[2*semInd] ;
+                        moves[2*captInd4+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd4 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd4 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(K)){
+                        temp1 = moves[2*captInd5] ;
+                        temp2 = moves[2*captInd5+1] ;
+                        moves[2*captInd5] = moves[2*semInd] ;
+                        moves[2*captInd5+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd5 +=1 ;
+                    }
+                }
 
                 bestInd = 0 ;
                 thisEval = 0 ;
                 bestEval = GAMEintINFINITY ;
 
+                tempassant = enPassant ;
+                tempForbCstlS = forbCstlS ;
+                tempForbCstlL = forbCstlL ;
+                tempForbcstlS = forbcstlS ;
+                tempForbcstlL = forbcstlL ;
+
                 //ump.clear() ;
                 for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                     position = moves[2*semIdx] ;
                     destination = moves[2*semIdx+1] ;
-                    //std::cout << position << std::endl ;
-                    //std::cout << destination << std::endl ;
+
+
+
                     pieceCaptured = 0 ;
                     wasCastle = false ;
                     wasPromote = false ;
@@ -392,52 +535,41 @@ void Game(){
                     brokecastleS = false ;
                     brokecastleL = false ;
 
-                    Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle,wasPromote,pieceCaptured);
-                    if (verbose){
-                        std::cout << "board before minimax " << std::endl ;
-                        coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                        std::cin >> nothing ;
-                    }
+                    Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle,wasPromote,pieceCaptured);
 
-                    //std::cout << pieceCaptured << wasCastle << wasPromote << std::endl;
-                    //sleep(2) ;
 
-                    thisEval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,4,5,-GAMEintINFINITY,GAMEintINFINITY,true) ;
 
-                    //std::cout << thisEval << std::endl ;
-                    if (verbose){
-                            std::cout << "eval = " << thisEval << std::endl ;
-                    }
+                    thisEval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,forbcstlS,forbcstlL,depthInit,depth1,depth2,-GAMEintINFINITY,GAMEintINFINITY,true) ;
+
+
+                    //show moves :
+                    //std::cout << position << " > " << destination << " = " << thisEval << std::endl ;
+
+
                     if (thisEval < bestEval){
                         bestInd = 2*semIdx ;
                         bestEval = thisEval ;
                     }
-                    if (verbose){std::cin >> nothing ;}
-                    /*
-                    std::cout << "about to undo " << std::endl;
-                    std::cout << "board after minimax " << std::endl ;
-                    std::cout << "position = " << position << std::endl ;
-                    std::cout << "destination = " << destination << std::endl ;
-                    std::cout << "wasCastle = " << wasCastle << std::endl ;
-                    std::cout << "pieceCaptured = " << pieceCaptured << std::endl ;
-                    coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                    */
-                    //sleep(2);
 
 
+                    enPassant = tempassant ;
+                    forbCstlS = tempForbCstlS ;
+                    forbCstlL = tempForbCstlL ;
+                    forbcstlS = tempForbcstlS ;
+                    forbcstlL = tempForbcstlL ;
 
                     Undo_move(position,destination,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,wasCastle,wasPromote,pieceCaptured,CstlL,CstlS,cstlL,cstlS,r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                    if (verbose){
-                        std::cout << "undone move in game() " << std::endl;
-                        coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P);
-                        std::cin >> nothing ;}
+
                 }
+
+                //std::cin >> nothing ;
+
 
                 for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                     if (2*semIdx == bestInd) {
                         position = moves[2*semIdx] ;
                         destination = moves[2*semIdx+1] ;
-                        Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle,wasPromote,pieceCaptured);
+                        Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle,wasPromote,pieceCaptured);
                         lastMove.first = position ;
                         lastMove.second = destination ;
                         //isEnPassant(lastMove, enPassant, P, true) ;

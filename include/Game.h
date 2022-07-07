@@ -2,6 +2,6 @@
 #define GAME_H
 
 
-void Game();
+void Game(int depth1, int depth2);
 
 #endif // GAME_H

@@ -655,3 +655,355 @@ void KingMoves(std::vector<int>& moves, unsigned long long int piece,unsigned lo
         }
     }
 }
+
+void legPaW2 (std::vector<int>& moves, unsigned long long int P,
+             unsigned long long int whitePieces, unsigned long long int blackPieces,
+             unsigned long long int occupied, unsigned long long int enPassant){
+
+     //std::string nothing ;
+
+    unsigned long long int attackRight, attackLeft;
+
+    attackRight = P ;
+    attackLeft = P ;
+
+    attackRight <<= 7 ;
+    attackLeft <<= 9 ;
+
+    attackRight = attackRight & ~FILEA & (blackPieces | enPassant) ;
+    attackLeft = attackLeft & ~FILEH & (blackPieces | enPassant) ;
+
+    //coutBitSet(attackLeft) ;
+    //std::cin >> nothing ;
+
+    for (int k = 16 ; k < 63 ; k++ ){
+        if ((attackRight>>k)&1) {
+            int dest = k ;
+            int pos = k - 7 ;
+            moves.push_back(pos);
+            moves.push_back(dest);
+        }
+    }
+    for (int k = 17 ; k < 64 ; k++ ){
+        if ((attackLeft>>k)&1) {
+            int dest = k ;
+            int pos = k - 9 ;
+            moves.push_back(pos);
+            moves.push_back(dest);
+        }
+    }
+}
+
+void legPaB2 (std::vector<int>& moves, unsigned long long int p,
+             unsigned long long int whitePieces, unsigned long long int blackPieces,
+             unsigned long long int occupied, unsigned long long int enPassant){
+
+    unsigned long long int attackRight, attackLeft;
+
+    attackRight = p ;
+    attackLeft = p ;
+
+    attackRight >>= 9 ;
+    attackLeft >>= 7 ;
+
+    attackRight = attackRight & ~FILEA & (whitePieces | enPassant) ;
+    attackLeft = attackLeft & ~FILEH & (whitePieces | enPassant) ;
+
+    //coutBitSet(pAttackRight) ;
+
+    for (int k = 0 ; k < 47 ; k++ ){
+        if ((attackRight>>k)&1) {
+            int dest = k ;
+            int pos = k + 9 ;
+            moves.push_back(pos);
+            moves.push_back(dest);
+        }
+    }
+    for (int k = 1 ; k < 48 ; k++ ){
+        if ((attackLeft>>k)&1) {
+            int dest = k ;
+            int pos = k + 7 ;
+            moves.push_back(pos);
+            moves.push_back(dest);
+        }
+    }
+
+}
+
+
+void sliderHV2(std::vector<int>& moves, unsigned long long int piece,
+            unsigned long long int allyPieces,
+             unsigned long long int occupied){
+
+    unsigned long long int slider ;
+    unsigned long long int sliderReverse ;
+    unsigned long long int lineAttack ;
+
+    for (int k = 0 ; k < 64 ; k++ ){
+        if ((piece>>k)&1){
+
+            slider = 1 ;
+            slider <<= k ;
+
+            sliderReverse = reverseULL(slider) ;
+
+            lineAttack = (((occupied&RANKS[k/8]) - 2*slider) ^ reverseULL(reverseULL((occupied&RANKS[k/8])) - 2*sliderReverse))&RANKS[k/8] ;
+
+            lineAttack |= (((occupied&FILES[7-k%8]) - 2*slider) ^ reverseULL(reverseULL((occupied&FILES[7-k%8])) - 2*sliderReverse))&FILES[7-k%8] ;
+
+            lineAttack &= occupied&(~allyPieces) ;
+
+            //coutBitSet(lineAttack) ;
+
+            for (int i = 0 ; i < 64 ; i++ ){
+                if ((lineAttack>>i)&1){
+                        moves.push_back(k) ;
+                        moves.push_back(i) ;
+                }
+            }
+        }
+    }
+ }
+
+
+void sliderD2(std::vector<int>& moves, unsigned long long int piece,
+         unsigned long long int allyPieces,
+         unsigned long long int occupied){
+
+    //std::string nothing ;
+
+    unsigned long long int slider ;
+    unsigned long long int sliderReverse ;
+    unsigned long long int lineAttack ;
+    unsigned long long int maskDiag ;
+
+    for (int k = 0 ; k < 64 ; k++ ){
+        if ((piece>>k)&1){
+
+            slider = 1 ;
+            slider <<= k ;
+
+            sliderReverse = reverseULL(slider) ;
+
+            //std::cout << "noir = " << (k/8 + k%8)%2 << "\tblanc = " << !((k/8 + k%8)%2) << "\tk%7 = " << k%7 << std::endl ;
+
+            if ((k/8 + k%8)%2){
+                maskDiag = bDIAGS[k%7] ;
+            } else {
+                maskDiag = wDIAGS[k%7] ;
+            }
+
+
+            //coutBitSet(maskDiag) ;
+
+            lineAttack = (((occupied&maskDiag) - 2*slider) ^ reverseULL(reverseULL((occupied&maskDiag)) - 2*sliderReverse))&maskDiag ;
+
+            //lineAttack |= (((occupied&FILES[k/8]) - 2*slider) ^ reverseULL(reverseULL((occupied&FILES[k/8])) - 2*sliderReverse))&FILES[k/8] ;
+
+            lineAttack &= occupied&(~allyPieces) ;
+
+            //std::cout << "attack bit is :" << std::endl ;
+            //coutBitSet(lineAttack) ;
+            //std::cin >> nothing ;
+
+            for (int i = 0 ; i < 64 ; i++ ){
+                if ((lineAttack>>i)&1){
+                        moves.push_back(k) ;
+                        moves.push_back(i) ;
+                }
+            }
+        }
+    }
+}
+
+
+void sliderCD2(std::vector<int>& moves, unsigned long long int piece,
+         unsigned long long int allyPieces,
+         unsigned long long int occupied){
+
+    //std::string nothing ;
+    unsigned long long int slider ;
+    unsigned long long int sliderReverse ;
+    unsigned long long int lineAttack ;
+    unsigned long long int maskDiag ;
+
+    for (int k = 0 ; k < 64 ; k++ ){
+        if ((piece>>k)&1){
+
+            slider = 1 ;
+            slider <<= k ;
+
+            sliderReverse = reverseULL(slider) ;
+
+            //std::cout << "noir = " << (k/8 + k%8)%2 << "\tblanc = " << !((k/8 + k%8)%2) << "\tk%9 = " << k%9 << std::endl ;
+
+            if ((k/8 + k%8)%2){
+                maskDiag = bCDIAGS[k%9] ;
+            } else {
+                maskDiag = wCDIAGS[k%9] ;
+            }
+
+
+            //coutBitSet(maskDiag) ;
+
+            lineAttack = (((occupied&maskDiag) - 2*slider) ^ reverseULL(reverseULL((occupied&maskDiag)) - 2*sliderReverse))&maskDiag ;
+
+            //lineAttack |= (((occupied&FILES[k/8]) - 2*slider) ^ reverseULL(reverseULL((occupied&FILES[k/8])) - 2*sliderReverse))&FILES[k/8] ;
+
+            lineAttack &= occupied&(~allyPieces) ;
+
+            //std::cout << "attack bit is :" << std::endl ;
+            //coutBitSet(lineAttack) ;
+            //std::cin >> nothing ;
+
+
+            for (int i = 0 ; i < 64 ; i++ ){
+                if ((lineAttack>>i)&1){
+                        moves.push_back(k) ;
+                        moves.push_back(i) ;
+                }
+            }
+        }
+    }
+}
+
+
+void KnightMoves2(std::vector<int>& moves, unsigned long long int piece, unsigned long long int occupied,
+         unsigned long long int allyPieces){
+
+    //std::string nothing ;
+    unsigned long long int knight ;
+    unsigned long long int Nmove ;
+    unsigned long long int Nmoves ;
+
+    for (int k = 0 ; k < 64 ; k++ ){
+        Nmoves = 0 ;
+        if ((piece>>k)&1){
+
+            knight = 1 ;
+            knight <<= k ;
+
+            Nmove = knight ; // //>
+            Nmove <<= 15  ;
+            Nmove &= ~(RANK1 | RANK2 | FILEA) ;
+            Nmoves |= Nmove ;
+
+            Nmove = knight ; // //<
+            Nmove <<= 17  ;
+            Nmove &= ~(RANK1 | RANK2 | FILEH) ;
+            Nmoves |= Nmove ;
+
+            Nmove = knight ; // \\>
+            Nmove >>= 17  ;
+            Nmove &= ~(RANK8 | RANK7 | FILEA) ;
+            Nmoves |= Nmove ;
+
+            Nmove = knight ; // \\<
+            Nmove >>= 15  ;
+            Nmove &= ~(RANK8 | RANK7 | FILEH) ;
+            Nmoves |= Nmove ;
+
+            Nmove = knight ; // />>
+            Nmove <<= 6  ;
+            Nmove &= ~(RANK1 | FILEA | FILEB) ;
+            Nmoves |= Nmove ;
+
+            Nmove = knight ; // /<<
+            Nmove <<= 10  ;
+            Nmove &= ~(RANK1 | FILEG | FILEH) ;
+            Nmoves |= Nmove ;
+
+            Nmove = knight ; // \>>
+            Nmove >>= 10  ;
+            Nmove &= ~(RANK8 | FILEA | FILEB) ;
+            Nmoves |= Nmove ;
+
+            Nmove = knight ; // \<<
+            Nmove >>= 6  ;
+            Nmove &= ~(RANK8 | FILEG | FILEH) ;
+            Nmoves |= Nmove ;
+
+            Nmoves &= occupied&(~allyPieces) ;
+
+            //coutBitSet(Nmoves|knight) ;
+            //std::cin >> nothing ;
+
+            for (int i = 0 ; i < 64 ; i++ ){
+                if ((Nmoves>>i)&1){
+                        moves.push_back(k) ;
+                        moves.push_back(i) ;
+                }
+            }
+        }
+    }
+}
+
+
+void KingMoves2(std::vector<int>& moves, unsigned long long int piece,unsigned long long int rook,
+         unsigned long long int allyPieces, unsigned long long int occupied,
+         bool CstlL, bool CstlS, bool cstlL, bool cstlS){
+
+    unsigned long long int king ;
+    unsigned long long int Nmove ;
+    unsigned long long int Nmoves (0);
+
+    for (int k = 0 ; k < 64 ; k++ ){ // optimisable
+        if ((piece>>k)&1){
+
+            king = 1 ;
+            king <<= k ;
+
+            Nmove = king ; // />
+            Nmove <<= 7  ;
+            Nmove &= ~(RANK1 | FILEA) ;
+            Nmoves |= Nmove ;
+
+            Nmove = king ; // >
+            Nmove >>= 1  ;
+            Nmove &= ~(FILEA) ;
+            Nmoves |= Nmove ;
+
+            Nmove = king ; // \>
+            Nmove >>= 9  ;
+            Nmove &= ~(RANK8 | FILEA) ;
+            Nmoves |= Nmove ;
+
+            Nmove = king ; // /<
+            Nmove <<= 9  ;
+            Nmove &= ~(RANK1 | FILEH) ;
+            Nmoves |= Nmove ;
+
+            Nmove = king ; // <
+            Nmove <<= 1  ;
+            Nmove &= ~(FILEH) ;
+            Nmoves |= Nmove ;
+
+            Nmove = king ; // \<
+            Nmove >>= 7  ;
+            Nmove &= ~(RANK8 | FILEH) ;
+            Nmoves |= Nmove ;
+
+            Nmove = king ; // /
+            Nmove <<= 8  ;
+            Nmove &= ~(RANK1) ;
+            Nmoves |= Nmove ;
+
+            Nmove = king ; // \.
+            Nmove >>= 8  ;
+            Nmove &= ~(RANK8) ;
+            Nmoves |= Nmove ;
+
+            Nmoves &= occupied&(~allyPieces) ;
+
+            for (int i = 0 ; i < 64 ; i++ ){
+                if ((Nmoves>>i)&1){
+
+                        moves.push_back(k) ;
+                        moves.push_back(i) ;
+                }
+            }
+            break ;
+        }
+    }
+}
+

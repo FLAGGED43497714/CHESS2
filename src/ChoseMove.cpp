@@ -24,8 +24,19 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
         unsigned long long int & R,unsigned long long int & N,unsigned long long int & B,
         unsigned long long int & Q,unsigned long long int & K,unsigned long long int & P,
         bool & CstlL, bool & CstlS , bool & cstlL , bool & cstlS, unsigned long long int & enPassant,
-        int depth, int veryMaxDepth, int alpha, int beta, bool maximizingPlayer)
+        unsigned long long int & forbCstlS, unsigned long long int & forbCstlL,
+        unsigned long long int & forbcstlS, unsigned long long int & forbcstlL,
+        int depthInit, int depth, int veryMaxDepth, int alpha, int beta, bool maximizingPlayer)
 {
+    std::string nothing ;
+
+        if (((R|N|B|Q|K|P)&(forbcstlS|forbcstlL))){
+            return 10020 ;
+        }
+        if (((r|n|b|q|k|p)&(forbCstlS|forbCstlL))){
+
+            return -10020 ;
+        }
 
 
         /*unsigned long long int zobKey ;
@@ -37,6 +48,11 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
             return it->second ;
         }*/
 
+        unsigned long long int tempEnPassant;
+        unsigned long long int tempForbCstlS;
+        unsigned long long int tempForbCstlL;
+        unsigned long long int tempForbcstlS;
+        unsigned long long int tempForbcstlL;
 
 
 
@@ -47,7 +63,7 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
 
         bool verbose = false ;
-        std::string nothing ;
+
         //std::cout << "in minimax " << std::endl ;
         //std::cout << "maximizingPlayer = " << maximizingPlayer << std::endl ;
         //std::cin >> nothing ;
@@ -71,6 +87,10 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
         //move ordering
         int captInd =0 ;
+        int captInd2 =0 ;
+        int captInd3 =0 ;
+        int captInd4 =0 ;
+        int captInd5 =0 ;
         int dest = 0 ;
         unsigned long long int destInt  = 1;
         int temp1 = 0;
@@ -78,13 +98,20 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
 
 
-        if ( ( depth == 0 ) || ( veryMaxDepth == 0 ) || ( K == 0 ) || ( k == 0 ) ){
+        if ( ( depth == 0 ) || ( veryMaxDepth == 0 )){
 
             return EvalFunction(r,n,b,q,k,p,R,N,B,Q,K,P) ;
 
         }
+        if (k == 0){
+            return 10000 + veryMaxDepth ;
+        }
+        if (K == 0){
+            return -10000 - veryMaxDepth ;
+        }
 
         std::vector<int> moves ;
+
         std::vector<int> moves2 ;
 
 
@@ -93,15 +120,38 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
             //std::cin >> nothing ;
 
             /* compute legal moves */
-            legPaW(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
-            KnightMoves(moves, N, whitePieces) ;
-            sliderD(moves, B, whitePieces, occupied) ;
-            sliderCD(moves, B, whitePieces, occupied) ;
-            sliderHV(moves, Q, whitePieces, occupied) ;
-            sliderD(moves, Q, whitePieces, occupied) ;
-            sliderCD(moves, Q, whitePieces, occupied) ;
-            sliderHV(moves, R, whitePieces, occupied) ;
-            KingMoves(moves, K, R, whitePieces, occupied, CstlL, CstlS, cstlL, cstlS) ;
+
+            /*if (depthInit < 0 ){
+                legPaW2(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
+                KnightMoves2(moves, N, occupied, whitePieces) ;
+                sliderD2(moves, B, whitePieces, occupied) ;
+                sliderCD2(moves, B, whitePieces, occupied) ;
+                sliderHV2(moves, Q, whitePieces, occupied) ;
+                sliderD2(moves, Q, whitePieces, occupied) ;
+                sliderCD2(moves, Q, whitePieces, occupied) ;
+                sliderHV2(moves, R, whitePieces, occupied) ;
+                KingMoves2(moves, K, R, whitePieces, occupied, CstlL, CstlS, cstlL, cstlS) ;
+
+                if (moves.size() == 0){
+                    return EvalFunction(r,n,b,q,k,p,R,N,B,Q,K,P) ;
+                }
+
+            } else {*/
+                legPaW(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
+                KnightMoves(moves, N, whitePieces) ;
+                sliderD(moves, B, whitePieces, occupied) ;
+                sliderCD(moves, B, whitePieces, occupied) ;
+                sliderHV(moves, Q, whitePieces, occupied) ;
+                sliderD(moves, Q, whitePieces, occupied) ;
+                sliderCD(moves, Q, whitePieces, occupied) ;
+                sliderHV(moves, R, whitePieces, occupied) ;
+                KingMoves(moves, K, R, whitePieces, occupied, CstlL, CstlS, cstlL, cstlS) ;
+            //}
+
+
+
+
+
 
 
             /*______________________*/
@@ -111,7 +161,11 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 moves2.push_back(moves[movInd]) ;
             }*/
 
-            /*captInd = 0 ;
+            captInd = 0 ;
+            captInd2 = 0 ;
+            captInd3 = 0 ;
+            captInd4 = 0 ;
+            captInd5 = 0 ;
             for (int semInd = 0 ; semInd < moves.size()/2 ; semInd ++){
                 destInt = 1 ;
                 dest = moves[2*semInd+1] ;
@@ -126,11 +180,77 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
                     captInd +=1 ;
                 }
-            }*/
+            }
+            for (int semInd = 1 ; semInd < captInd ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(k|q|r|n|b)){
+                        temp1 = moves[2*captInd2] ;
+                        temp2 = moves[2*captInd2+1] ;
+                        moves[2*captInd2] = moves[2*semInd] ;
+                        moves[2*captInd2+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd2 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd2 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(k|q|r)){
+                        temp1 = moves[2*captInd3] ;
+                        temp2 = moves[2*captInd3+1] ;
+                        moves[2*captInd3] = moves[2*semInd] ;
+                        moves[2*captInd3+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd3 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd3 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(k|q)){
+                        temp1 = moves[2*captInd4] ;
+                        temp2 = moves[2*captInd4+1] ;
+                        moves[2*captInd4] = moves[2*semInd] ;
+                        moves[2*captInd4+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd4 +=1 ;
+                    }
+                }
+                for (int semInd = 1 ; semInd < captInd4 ; semInd ++){
+                    destInt = 1 ;
+                    dest = moves[2*semInd+1] ;
+                    destInt <<= dest ;
+                    if (destInt&(k)){
+                        temp1 = moves[2*captInd5] ;
+                        temp2 = moves[2*captInd5+1] ;
+                        moves[2*captInd5] = moves[2*semInd] ;
+                        moves[2*captInd5+1] = moves[2*semInd+1] ;
+                        moves[2*semInd] = temp1 ;
+                        moves[2*semInd+1] = temp2 ;
+
+                        captInd5 +=1 ;
+                    }
+                }
 
 
 
             maxEval = - intINFINITY ;
+            tempEnPassant = enPassant ;
+            tempForbCstlS = forbCstlS ;
+            tempForbCstlL = forbCstlL ;
+            tempForbcstlS = forbcstlS ;
+            tempForbcstlL = forbcstlL ;
+
             for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                 pieceCaptured = 0 ;
                 wasCastle = false ;
@@ -143,7 +263,7 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
                 position = moves[2*semIdx] ;
                 destination = moves[2*semIdx+1] ;
-                Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle, wasPromote, pieceCaptured) ;
+                Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P, enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle, wasPromote, pieceCaptured) ;
                 /*if (verbose){
                     std::cout << "done move" << std::endl ;
                     coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
@@ -154,7 +274,8 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 }
 
 
-                eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,depth-1, veryMaxDepth-1, alpha,beta,false) ;
+
+                eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,tempForbcstlS,tempForbcstlL,depthInit-1,depth-1, veryMaxDepth-1, alpha,beta,false) ;
                 //ump.insert(std::pair<unsigned long long int, int>(zobKey, eval));
 
 
@@ -167,6 +288,12 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 if (depthIncreased){
                     depth -= 1 ;
                 }
+
+                enPassant = tempEnPassant ;
+                forbCstlS = tempForbCstlS ;
+                forbCstlL = tempForbCstlL ;
+                forbcstlS = tempForbcstlS ;
+                forbcstlL = tempForbcstlL ;
 
                 Undo_move(position,destination,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,wasCastle, wasPromote,pieceCaptured,CstlL,CstlS,cstlL,cstlS,r,n,b,q,k,p,R,N,B,Q,K,P) ;
                 /*if (verbose){
@@ -200,15 +327,32 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
             //std::cin >> nothing ;
 
             /* compute legal moves */
-            legPaB(moves, p, whitePieces, blackPieces, occupied, enPassant) ;
-            KnightMoves(moves, n, blackPieces) ;
-            sliderD(moves, b, blackPieces, occupied) ;
-            sliderCD(moves, b, blackPieces, occupied) ;
-            sliderHV(moves, q, blackPieces, occupied) ;
-            sliderD(moves, q, blackPieces, occupied) ;
-            sliderCD(moves, q, blackPieces, occupied) ;
-            sliderHV(moves, r, blackPieces, occupied) ;
-            KingMoves(moves, k, r,  blackPieces, occupied, CstlL, CstlS, cstlL, cstlS) ;
+            /*if (depthInit < 0){
+                legPaB2(moves, p, whitePieces, blackPieces, occupied, enPassant) ;
+                KnightMoves2(moves, n, occupied, blackPieces) ;
+                sliderD2(moves, b, blackPieces, occupied) ;
+                sliderCD2(moves, b, blackPieces, occupied) ;
+                sliderHV2(moves, q, blackPieces, occupied) ;
+                sliderD2(moves, q, blackPieces, occupied) ;
+                sliderCD2(moves, q, blackPieces, occupied) ;
+                sliderHV2(moves, r, blackPieces, occupied) ;
+                KingMoves2(moves, k, r,  blackPieces, occupied, CstlL, CstlS, cstlL, cstlS) ;
+                if (moves.size() == 0){
+                    return EvalFunction(r,n,b,q,k,p,R,N,B,Q,K,P) ;
+                }
+
+            } else {*/
+                legPaB(moves, p, whitePieces, blackPieces, occupied, enPassant) ;
+                KnightMoves(moves, n, blackPieces) ;
+                sliderD(moves, b, blackPieces, occupied) ;
+                sliderCD(moves, b, blackPieces, occupied) ;
+                sliderHV(moves, q, blackPieces, occupied) ;
+                sliderD(moves, q, blackPieces, occupied) ;
+                sliderCD(moves, q, blackPieces, occupied) ;
+                sliderHV(moves, r, blackPieces, occupied) ;
+                KingMoves(moves, k, r,  blackPieces, occupied, CstlL, CstlS, cstlL, cstlS) ;
+            //}
+
 
 
             /*______________________*/
@@ -220,7 +364,11 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
             }*/
 
 
-            /*captInd = 0 ;
+            captInd = 0 ;
+            captInd2 = 0 ;
+            captInd3 = 0 ;
+            captInd4 = 0 ;
+            captInd5 = 0 ;
             for (int semInd = 0 ; semInd < moves.size()/2 ; semInd ++){
                 destInt = 1 ;
                 dest = moves[2*semInd+1] ;
@@ -235,10 +383,75 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
                     captInd +=1 ;
                 }
-            }*/
+            }
+            for (int semInd = 1 ; semInd < captInd ; semInd ++){
+                destInt = 1 ;
+                dest = moves[2*semInd+1] ;
+                destInt <<= dest ;
+                if (destInt&(K|Q|R|N|B)){
+                    temp1 = moves[2*captInd2] ;
+                    temp2 = moves[2*captInd2+1] ;
+                    moves[2*captInd2] = moves[2*semInd] ;
+                    moves[2*captInd2+1] = moves[2*semInd+1] ;
+                    moves[2*semInd] = temp1 ;
+                    moves[2*semInd+1] = temp2 ;
+
+                    captInd2 +=1 ;
+                }
+            }
+            for (int semInd = 1 ; semInd < captInd2 ; semInd ++){
+                destInt = 1 ;
+                dest = moves[2*semInd+1] ;
+                destInt <<= dest ;
+                if (destInt&(K|Q|R)){
+                    temp1 = moves[2*captInd3] ;
+                    temp2 = moves[2*captInd3+1] ;
+                    moves[2*captInd3] = moves[2*semInd] ;
+                    moves[2*captInd3+1] = moves[2*semInd+1] ;
+                    moves[2*semInd] = temp1 ;
+                    moves[2*semInd+1] = temp2 ;
+
+                    captInd3 +=1 ;
+                }
+            }
+            for (int semInd = 1 ; semInd < captInd3 ; semInd ++){
+                destInt = 1 ;
+                dest = moves[2*semInd+1] ;
+                destInt <<= dest ;
+                if (destInt&(K|Q)){
+                    temp1 = moves[2*captInd4] ;
+                    temp2 = moves[2*captInd4+1] ;
+                    moves[2*captInd4] = moves[2*semInd] ;
+                    moves[2*captInd4+1] = moves[2*semInd+1] ;
+                    moves[2*semInd] = temp1 ;
+                    moves[2*semInd+1] = temp2 ;
+
+                    captInd4 +=1 ;
+                }
+            }
+            for (int semInd = 1 ; semInd < captInd4 ; semInd ++){
+                destInt = 1 ;
+                dest = moves[2*semInd+1] ;
+                destInt <<= dest ;
+                if (destInt&(K)){
+                    temp1 = moves[2*captInd5] ;
+                    temp2 = moves[2*captInd5+1] ;
+                    moves[2*captInd5] = moves[2*semInd] ;
+                    moves[2*captInd5+1] = moves[2*semInd+1] ;
+                    moves[2*semInd] = temp1 ;
+                    moves[2*semInd+1] = temp2 ;
+
+                    captInd5 +=1 ;
+                }
+            }
 
 
             minEval = intINFINITY ;
+            tempEnPassant = enPassant ;
+            tempForbcstlS = forbcstlS ;
+            tempForbcstlL = forbcstlL ;
+            tempForbCstlS = forbCstlS ;
+            tempForbCstlL = forbCstlL ;
             for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                 pieceCaptured = 0 ;
                 wasCastle = false ;
@@ -251,7 +464,7 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
                 position = moves[2*semIdx] ;
                 destination = moves[2*semIdx+1] ;
-                Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,wasCastle, wasPromote,pieceCaptured) ;
+                Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P,enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle, wasPromote,pieceCaptured) ;
                 /*if (verbose){
                     std::cout << "done move" << std::endl ;
                     coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
@@ -262,7 +475,8 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 }
 
 
-                eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant, depth-1, veryMaxDepth-1 ,alpha,beta,true) ;
+
+                eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,tempForbcstlS,tempForbcstlL,depthInit-1,depth-1,veryMaxDepth-1,alpha,beta,true) ;
                 //ump.insert(std::pair<unsigned long long int, int>(zobKey, eval));
 
                 if (verbose && (eval < minEval)){
@@ -274,7 +488,11 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                     depth -= 1 ;
                 }
 
-
+                enPassant = tempEnPassant ;
+                forbcstlS = tempForbcstlS ;
+                forbcstlL = tempForbcstlL ;
+                forbCstlS = tempForbCstlS ;
+                forbCstlL = tempForbCstlL ;
                 Undo_move(position,destination,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,wasCastle, wasPromote,pieceCaptured,CstlL,CstlS,cstlL,cstlS,r,n,b,q,k,p,R,N,B,Q,K,P) ;
                 /*if (verbose){
                     coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;

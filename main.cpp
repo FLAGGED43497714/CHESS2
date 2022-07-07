@@ -77,7 +77,7 @@ int main()
     coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
     std::cin >> nothing ;*/
 
-    Game() ;
+    Game(3,5) ;
 
     return 0;
 }

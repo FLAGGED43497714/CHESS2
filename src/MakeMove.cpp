@@ -37,10 +37,18 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
         unsigned long long int & r,unsigned long long int & n,unsigned long long int & b,
         unsigned long long int & q,unsigned long long int & k,unsigned long long int & p,unsigned long long int & R,
         unsigned long long int & N,unsigned long long int & B,unsigned long long int & Q,unsigned long long int & K,
-        unsigned long long int & P, bool & wasCastle, bool & wasPromote, int & pieceCaptured){
+        unsigned long long int & P, unsigned long long int & enPassant, unsigned long long int & forbCstlS,
+        unsigned long long int & forbCstlL, unsigned long long int & forbcstlS, unsigned long long int & forbcstlL,
+        bool & wasCastle, bool & wasPromote, int & pieceCaptured){
 
     //piece captured : aucune - rnbqkpRNBQKP
     //int : 0 - 1-2-3-4-5-6-7-8-9-10-11-12
+
+    enPassant = 0 ;
+    forbCstlS = 0 ;
+    forbCstlL = 0 ;
+    forbcstlS = 0 ;
+    forbcstlL = 0 ;
 
     std::string nothing ;
 
@@ -125,9 +133,9 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
     }
 
     else { //en passant
-        if (( dest == pos + 7 ) && (P>>pos&1)){
+        if (( dest == pos + 7 ) && (P>>pos&1)){ //prise avant droit
             destInt = 1 ;
-            destInt <<= pos-1 ;
+            destInt <<= pos-1 ; //à droite de 1
             p -= destInt ;
             destInt = 1 ;
             destInt <<= dest ;
@@ -178,6 +186,7 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
     if ((pos==3)&&(dest==1)&&(K>>pos&1)&&(R&1)&&CstlS){ //white short
 
         wasCastle = true ;
+        forbCstlS = 12 ;
         K = K - posInt + destInt ;
         posInt = 1 ;
         destInt = 1 ;
@@ -193,6 +202,7 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
 
     if ((pos==3)&&(dest==5)&&(K>>pos&1)&&(R>>7&1)&&CstlL){ //white long
         wasCastle = true ;
+        forbCstlL = 24 ;
         K = K - posInt + destInt ;
         posInt = 1 ;
         destInt = 1 ;
@@ -206,6 +216,7 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
 
     if ((pos==59)&&(dest==57)&&(k>>pos&1)&&(r>>56&1)&&cstlS){ //black short
         wasCastle = true ;
+        forbcstlS = 864691128455135232 ;
         k = k - posInt + destInt ;
         posInt = 1 ;
         destInt = 1 ;
@@ -219,6 +230,7 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
 
     if ((pos==59)&&(dest==61)&&(k>>pos&1)&&(r>>63&1)&&cstlL){ //black long
         wasCastle = true ;
+        forbcstlL = 1729382256910270464 ;
         k = k - posInt + destInt ;
         posInt = 1 ;
         destInt = 1 ;
@@ -280,6 +292,12 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
         p -= posInt ;
         p += destInt ;
 
+        if (dest == pos-16){
+            enPassant = 1 ;
+            enPassant <<=(pos-8) ;
+
+        }
+
     } else {
 
     if (R>>pos&1){
@@ -335,6 +353,11 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
     if (P>>pos&1){
         P -= posInt ;
         P += destInt ;
+
+        if (dest == pos+16){
+            enPassant = 1 ;
+            enPassant <<=(pos+8) ;
+        }
     }
 
     }}}}}}}}}}}}}}}}}
@@ -389,6 +412,7 @@ void Undo_move(int wasPos, int wasDest, bool brokeCastleS, bool brokeCastleL, bo
 
     unsigned long long int wasDestInt (1) ;
     unsigned long long int wasPosInt (1) ;
+    unsigned long long int temPassant (1) ;
 
 
     if (wasPromote){
@@ -524,6 +548,18 @@ void Undo_move(int wasPos, int wasDest, bool brokeCastleS, bool brokeCastleL, bo
     } else {
 
     if (p>>wasDest&1){
+
+        if ((wasDest == wasPos-7) && (pieceCaptured == 0)){ // enPassant
+            temPassant <<= (wasPos+1) ;
+            P+=temPassant ;
+
+
+        }
+        if ((wasDest == wasPos-9) && (pieceCaptured == 0)){ // enPassant
+            temPassant <<= (wasPos-1) ;
+            P+=temPassant ;
+
+        }
         p = p - wasDestInt + wasPosInt ;
     } else {
 
@@ -551,6 +587,16 @@ void Undo_move(int wasPos, int wasDest, bool brokeCastleS, bool brokeCastleL, bo
 
     if (P>>wasDest&1){
         P = P - wasDestInt + wasPosInt ;
+        if ((wasDest == wasPos+7) && (pieceCaptured == 0)){ // enPassant
+            temPassant <<= (wasPos-1) ;
+            p+=temPassant ;
+
+        }
+        if ((wasDest == wasPos+9) && (pieceCaptured == 0)){ // enPassant
+            temPassant <<= (wasPos+1) ;
+            p+=temPassant ;
+
+        }
     }
 
 

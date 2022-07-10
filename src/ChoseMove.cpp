@@ -112,7 +112,7 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
         std::vector<int> moves ;
 
-        std::vector<int> moves2 ;
+        //std::vector<int> moves2 ;
 
 
         if (maximizingPlayer){
@@ -279,11 +279,6 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 //ump.insert(std::pair<unsigned long long int, int>(zobKey, eval));
 
 
-                if (verbose && (eval > maxEval)){
-                    coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                    std::cout << "eval = " << eval << std::endl ;
-                    std::cout << "pieceCaptured = " << pieceCaptured << std::endl ;
-                    std::cin >> nothing ;}
 
                 if (depthIncreased){
                     depth -= 1 ;
@@ -479,11 +474,7 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,tempForbcstlS,tempForbcstlL,depthInit-1,depth-1,veryMaxDepth-1,alpha,beta,true) ;
                 //ump.insert(std::pair<unsigned long long int, int>(zobKey, eval));
 
-                if (verbose && (eval < minEval)){
-                    coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                    std::cout << "eval = " << eval << std::endl ;
-                    std::cout << "pieceCaptured = " << pieceCaptured << std::endl ;
-                    std::cin >> nothing ;}
+
                 if (depthIncreased){
                     depth -= 1 ;
                 }

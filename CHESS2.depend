@@ -125,7 +125,7 @@
 1651521024 c:\users\balth\c++\chesconstest1\chess2\include\global.h
 	<unordered_map>
 
-1657111312 source:c:\users\balth\c++\chesconstest1\bestversionchess\chess2\main.cpp
+1657483297 source:c:\users\balth\c++\chesconstest1\bestversionchess\chess2\main.cpp
 	"Game.h"
 	"initBoard.h"
 	"MakeMove.h"
@@ -167,7 +167,7 @@
 	"BitwiseFunction.h"
 	<bitset>
 
-1657224288 source:c:\users\balth\c++\chesconstest1\bestversionchess\chess2\src\chosemove.cpp
+1657227182 source:c:\users\balth\c++\chesconstest1\bestversionchess\chess2\src\chosemove.cpp
 	"ChoseMove.h"
 	"Eval.h"
 	"MakeMove.h"
@@ -189,7 +189,7 @@
 	<bitset>
 	<iostream>
 
-1657045138 source:c:\users\balth\c++\chesconstest1\bestversionchess\chess2\src\eval.cpp
+1657234260 source:c:\users\balth\c++\chesconstest1\bestversionchess\chess2\src\eval.cpp
 	"Eval.h"
 	"BitwiseFunction.h"
 	"Constants.h"
@@ -200,7 +200,7 @@
 	<limits>
 	<bitset>
 
-1657224452 source:c:\users\balth\c++\chesconstest1\bestversionchess\chess2\src\game.cpp
+1657482224 source:c:\users\balth\c++\chesconstest1\bestversionchess\chess2\src\game.cpp
 	"Game.h"
 	<iostream>
 	<bitset>

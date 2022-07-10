@@ -32,14 +32,15 @@ void Game(int depth1, int depth2){
 
     unsigned long long int r,n,b,q,k,p,R,N,B,Q,K,P;
 
-    std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" ;
+    //std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" ;
+    std::string fen = "r3k2r/ppp2ppp/2bb2q1/4p1B1/1P4Q1/2P2N2/P1P2PPP/2KR3R" ;
 
 
     initFromFEN(fen,r,n,b,q,k,p,R,N,B,Q,K,P) ;
 
     std::vector<int> moves ;
 
-    int moveNb = 0 ;
+    int moveNb = 1 ;
 
     unsigned long long int occupied ;
     unsigned long long int blackPieces ;

@@ -19,6 +19,10 @@
 int main()
 {
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
     Game(3,5) ;
 
     return 0;

@@ -33,8 +33,12 @@ void Game(int depth1, int depth2){
     unsigned long long int r,n,b,q,k,p,R,N,B,Q,K,P;
 
     std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" ;
+<<<<<<< HEAD
 
     //std::string fen = "r1b1kb1r/ppp1qppp/2B5/3nN3/8/3P4/PPP2PPP/RNBQK2R" ;
+=======
+    //std::string fen = "r3k2r/ppp1bppp/2n5/8/3P4/5N1P/qPQ2PP1/1RB2RK1" ;
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
 
 
     initFromFEN(fen,r,n,b,q,k,p,R,N,B,Q,K,P) ;
@@ -334,7 +338,12 @@ void Game(int depth1, int depth2){
 
                     if (thisEval > bestEval){
                         variante = {position, destination} ;
+<<<<<<< HEAD
                         variante.insert(variante.end(), tempVariante.begin(), tempVariante.end()) ;
+=======
+                        variante.resize(2) ;
+                        variante.insert(variante.end(), tempVariante.begin(), tempVariante.end() ) ;
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
                         bestInd = 2*semIdx ;
                         bestEval = thisEval ;
                     }

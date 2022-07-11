@@ -252,7 +252,11 @@
 	<iostream>
 	<string>
 
+<<<<<<< HEAD
 1657533097 source:c:\users\balth\c++\chesconstest1\chess3\chess2\main.cpp
+=======
+1657527980 source:c:\users\balth\c++\chesconstest1\chess3\chess2\main.cpp
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
 	"Game.h"
 	"initBoard.h"
 	"MakeMove.h"
@@ -301,7 +305,11 @@
 	<bitset>
 	<iostream>
 
+<<<<<<< HEAD
 1657533083 source:c:\users\balth\c++\chesconstest1\chess3\chess2\src\eval.cpp
+=======
+1657234260 source:c:\users\balth\c++\chesconstest1\chess3\chess2\src\eval.cpp
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
 	"Eval.h"
 	"BitwiseFunction.h"
 	"Constants.h"
@@ -312,7 +320,11 @@
 	<limits>
 	<bitset>
 
+<<<<<<< HEAD
 1657531888 source:c:\users\balth\c++\chesconstest1\chess3\chess2\src\game.cpp
+=======
+1657528143 source:c:\users\balth\c++\chesconstest1\chess3\chess2\src\game.cpp
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
 	"Game.h"
 	<iostream>
 	<bitset>
@@ -356,7 +368,11 @@
 	<iostream>
 	<unistd.h>
 
+<<<<<<< HEAD
 1657529483 source:c:\users\balth\c++\chesconstest1\chess3\chess2\src\makemove.cpp
+=======
+1657112683 source:c:\users\balth\c++\chesconstest1\chess3\chess2\src\makemove.cpp
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
 	"MakeMove.h"
 	"coutBoard.h"
 	<iostream>
@@ -368,7 +384,11 @@
 	<iostream>
 	<string>
 
+<<<<<<< HEAD
 1657530723 source:c:\users\balth\c++\chesconstest1\chess3\chess2\src\chosemove.cpp
+=======
+1657528132 source:c:\users\balth\c++\chesconstest1\chess3\chess2\src\chosemove.cpp
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
 	"ChoseMove.h"
 	"Eval.h"
 	"MakeMove.h"

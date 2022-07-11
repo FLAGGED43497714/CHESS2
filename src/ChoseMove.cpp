@@ -57,6 +57,7 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
 
         if ( ( depth == 0 ) || ( veryMaxDepth == 0 )){
+<<<<<<< HEAD
             return EvalFunction(r,n,b,q,k,p,R,N,B,Q,K,P) ;
 
         }
@@ -67,6 +68,18 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
         }
         if (K == 0){
             rootVariant.clear() ;
+=======
+
+            return EvalFunction(r,n,b,q,k,p,R,N,B,Q,K,P) ;
+
+        }
+        if (k == 0){
+
+            return 10000 + veryMaxDepth ;
+        }
+        if (K == 0){
+
+>>>>>>> 6dbf6f8c329641586c834f0922a2ad0bd41590c8
             return -10000 - veryMaxDepth ;
         }
 

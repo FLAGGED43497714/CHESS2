@@ -63,7 +63,7 @@ unsigned long long int const Nm40 = bitsetNm40.to_ullong() ;
 std::bitset<64> const bitsetNm50("1000000100000000000000000000000000000000000000000000000010000001") ;
 unsigned long long int const Nm50 = bitsetNm50.to_ullong() ;
 
-std::bitset<64> const bitsetB10("0000000000000000000110000001100000011000001001000110011000000000") ;
+std::bitset<64> const bitsetB10("0000000000000000000110000001100000111100011001100000000000000000") ;
 unsigned long long int const B10 = bitsetB10.to_ullong() ;
 
 std::bitset<64> const bitsetB5("0000000000000000001001000110011000000000000000000100001000000000") ;
@@ -133,7 +133,7 @@ unsigned long long int const nm30 (1729524650133749820) ;
 unsigned long long int const nm40 (4792111478498951490) ;
 unsigned long long int const nm50 (9295429630892703873) ;
 
-unsigned long long int const b10 (28750133526528000) ;
+unsigned long long int const b10 (112408288296960) ;
 unsigned long long int const b5 (18577350176538624) ;
 unsigned long long int const bm10 (6521636128632701310) ;
 unsigned long long int const bm20 (9295429630892703873) ;

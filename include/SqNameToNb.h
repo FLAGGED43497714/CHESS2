@@ -5,5 +5,7 @@
 
 int SquareNameToNb(std::string SquareName);
 
+std::string SquareNbtoName(int SquareNb);
+
 
 #endif // SQNAMETONB_H

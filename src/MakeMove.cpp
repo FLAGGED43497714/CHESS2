@@ -340,11 +340,6 @@ void Do_move(int pos, int dest, bool & CstlL, bool & CstlS, bool & cstlL, bool &
         brokeCastleL = CstlL ;
         brokeCastleS = CstlS ;
 
-        /*if (brokeCastleL || brokeCastleS){
-            std::cout << "castle broken" << std::endl ;
-        }*/
-
-
         CstlL = false ;
         CstlS = false ;
 
@@ -373,13 +368,7 @@ void Undo_move(int wasPos, int wasDest, bool brokeCastleS, bool brokeCastleL, bo
 
     std::string nothing ;
 
-    //std::cout << "in undo move" << std::endl ;
-    //std::cin >> nothing ;
 
-    //std::cout << "entering undo move with pieceCaptured = " << pieceCaptured << std::endl ;
-
-    //std::cout << "wasDest = " << wasDest << std::endl;
-    //std::cout << "wasPos = " << wasPos << std::endl;
 
     //piece captured : aucune - rnbqkpRNBQKP
     //int : 0 - 1-2-3-4-5-6-7-8-9-10-11-12

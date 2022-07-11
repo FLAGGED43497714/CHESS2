@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+//#include <string>
 
 int intINFINITY = std::numeric_limits<int>::max() ;
 
@@ -25,12 +26,15 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
         unsigned long long int & Q,unsigned long long int & K,unsigned long long int & P,
         bool & CstlL, bool & CstlS , bool & cstlL , bool & cstlS, unsigned long long int & enPassant,
         unsigned long long int & forbCstlS, unsigned long long int & forbCstlL,
-        unsigned long long int & forbcstlS, unsigned long long int & forbcstlL,
+        unsigned long long int & forbcstlS, unsigned long long int & forbcstlL, std::vector<int>& rootVariant,
         int depthInit, int depth, int veryMaxDepth, int alpha, int beta, bool maximizingPlayer)
 {
-    std::string nothing ;
+
+
+
 
         if (((R|N|B|Q|K|P)&(forbcstlS|forbcstlL))){
+
             return 10020 ;
         }
         if (((r|n|b|q|k|p)&(forbCstlS|forbCstlL))){
@@ -47,6 +51,32 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
         if(it != ump.end()){
             return it->second ;
         }*/
+
+
+
+
+
+        if ( ( depth == 0 ) || ( veryMaxDepth == 0 )){
+
+            return EvalFunction(r,n,b,q,k,p,R,N,B,Q,K,P) ;
+
+        }
+        if (k == 0){
+
+            return 10000 + veryMaxDepth ;
+        }
+        if (K == 0){
+
+            return -10000 - veryMaxDepth ;
+        }
+
+        std::string nothing ;
+
+        std::vector<int> moves ;
+
+
+        std::vector<int> tempSuffix ;
+        std::vector<int> tempVariante ;
 
         unsigned long long int tempEnPassant;
         unsigned long long int tempForbCstlS;
@@ -96,47 +126,11 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
         int temp1 = 0;
         int temp2 = 0;
 
-
-
-        if ( ( depth == 0 ) || ( veryMaxDepth == 0 )){
-
-            return EvalFunction(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-
-        }
-        if (k == 0){
-            return 10000 + veryMaxDepth ;
-        }
-        if (K == 0){
-            return -10000 - veryMaxDepth ;
-        }
-
-        std::vector<int> moves ;
-
         //std::vector<int> moves2 ;
 
 
         if (maximizingPlayer){
-            //std::cout << "in minimax with maximizing player = false" << std::endl ;
-            //std::cin >> nothing ;
 
-            /* compute legal moves */
-
-            /*if (depthInit < 0 ){
-                legPaW2(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
-                KnightMoves2(moves, N, occupied, whitePieces) ;
-                sliderD2(moves, B, whitePieces, occupied) ;
-                sliderCD2(moves, B, whitePieces, occupied) ;
-                sliderHV2(moves, Q, whitePieces, occupied) ;
-                sliderD2(moves, Q, whitePieces, occupied) ;
-                sliderCD2(moves, Q, whitePieces, occupied) ;
-                sliderHV2(moves, R, whitePieces, occupied) ;
-                KingMoves2(moves, K, R, whitePieces, occupied, CstlL, CstlS, cstlL, cstlS) ;
-
-                if (moves.size() == 0){
-                    return EvalFunction(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                }
-
-            } else {*/
                 legPaW(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
                 KnightMoves(moves, N, whitePieces) ;
                 sliderD(moves, B, whitePieces, occupied) ;
@@ -146,20 +140,7 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 sliderCD(moves, Q, whitePieces, occupied) ;
                 sliderHV(moves, R, whitePieces, occupied) ;
                 KingMoves(moves, K, R, whitePieces, occupied, CstlL, CstlS, cstlL, cstlS) ;
-            //}
 
-
-
-
-
-
-
-            /*______________________*/
-
-            /*for (int movInd = 0 ; movInd < moves.size() ; movInd++)
-            {
-                moves2.push_back(moves[movInd]) ;
-            }*/
 
             captInd = 0 ;
             captInd2 = 0 ;
@@ -264,20 +245,21 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 position = moves[2*semIdx] ;
                 destination = moves[2*semIdx+1] ;
                 Do_move(position,destination,CstlL,CstlS,cstlL,cstlS,brokeCastleS,brokeCastleL,brokecastleS,brokecastleL,r,n,b,q,k,p,R,N,B,Q,K,P, enPassant,forbCstlS,forbCstlL,forbcstlS,forbcstlL,wasCastle, wasPromote, pieceCaptured) ;
-                /*if (verbose){
-                    std::cout << "done move" << std::endl ;
-                    coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-                    std::cin >> nothing ;
-                    }*/
+
                 if ((depth == 1) && (pieceCaptured != 0)){
                     depth += 1 ;
+                    depthIncreased = true ;
                 }
 
+                eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,tempForbcstlS,tempForbcstlL, tempSuffix, depthInit-1,depth-1, veryMaxDepth-1, alpha,beta,false) ;
 
+                if (eval > maxEval){
 
-                eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,tempForbcstlS,tempForbcstlL,depthInit-1,depth-1, veryMaxDepth-1, alpha,beta,false) ;
-                //ump.insert(std::pair<unsigned long long int, int>(zobKey, eval));
+                    tempVariante = {position, destination} ;
+                    tempVariante.insert(tempVariante.end(), tempSuffix.begin(), tempSuffix.end() );
+                    tempSuffix.clear() ;
 
+                }
 
 
                 if (depthIncreased){
@@ -299,14 +281,10 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                 maxEval = std::max(maxEval,eval) ;
                 alpha = std::max(alpha, eval) ;
                 if (beta <= alpha) {
-                    if (verbose){
-                    std::cout << "Beta <= alpha : break" << std::endl ;
-                    std::cin >> nothing ;
-                    }
-
                     break ;
                 }
             }
+            rootVariant = tempVariante ;
             return maxEval ;
 
             }
@@ -471,9 +449,16 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
 
 
 
-                eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,tempForbcstlS,tempForbcstlL,depthInit-1,depth-1,veryMaxDepth-1,alpha,beta,true) ;
+                eval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,tempForbcstlS,tempForbcstlL, tempSuffix, depthInit-1,depth-1,veryMaxDepth-1,alpha,beta,true) ;
                 //ump.insert(std::pair<unsigned long long int, int>(zobKey, eval));
 
+                if (eval < minEval){
+
+                    tempVariante = {position, destination} ;
+                    tempVariante.insert(tempVariante.end(), tempSuffix.begin(), tempSuffix.end());
+                    tempSuffix.clear() ;
+
+                }
 
                 if (depthIncreased){
                     depth -= 1 ;
@@ -500,6 +485,7 @@ int minimax(unsigned long long int & r,unsigned long long int & n,unsigned long 
                     break ;
                 }
             }
+            rootVariant = tempVariante ;
             return minEval ;
    }
 }

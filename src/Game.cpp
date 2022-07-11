@@ -27,20 +27,20 @@ void Game(int depth1, int depth2){
 
     bool verbose = false ;
 
-    bool whiteHuman = true ;
+    bool whiteHuman = false ;
     bool blackHuman = 1 - whiteHuman;
 
     unsigned long long int r,n,b,q,k,p,R,N,B,Q,K,P;
 
-    //std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" ;
-    std::string fen = "r3k2r/ppp2ppp/2bb2q1/4p1B1/1P4Q1/2P2N2/P1P2PPP/2KR3R" ;
+    std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" ;
+    //std::string fen = "r3k2r/ppp1bppp/2n5/8/3P4/5N1P/qPQ2PP1/1RB2RK1" ;
 
 
     initFromFEN(fen,r,n,b,q,k,p,R,N,B,Q,K,P) ;
 
     std::vector<int> moves ;
 
-    int moveNb = 1 ;
+    int moveNb = 0 ;
 
     unsigned long long int occupied ;
     unsigned long long int blackPieces ;
@@ -98,6 +98,9 @@ void Game(int depth1, int depth2){
 
     unsigned long long int tempassant ;
 
+    std::vector<int> variante ;
+    std::vector<int> tempVariante ;
+
     //extern std::unordered_map<unsigned long long int, int> ump ;
     //extern std::unordered_map<unsigned long long int, int>::iterator it ;
 
@@ -121,13 +124,16 @@ void Game(int depth1, int depth2){
         //std::cin >> nothing ;
         system("cls");
         std::cout << "CstlS " << CstlS << " CstlL "<< CstlL << " cstlS "<< cstlS <<" cstlL "<< cstlL << std::endl ;
-        std::cout << "eval : " << (float) bestEval/100 << std::endl;
+        for (int varInd =0 ; varInd < variante.size()/2 ; varInd ++){
+            if (varInd != 0){
+                std::cout << " => " ;
+            }
+            std::cout << SquareNbtoName(variante[2*varInd]) + " > " + SquareNbtoName(variante[2*varInd+1]) ;
+        }
+        std::cout << std::endl << "eval : " << (float) bestEval/100 << std::endl;
         coutBoard(r,n,b,q,k,p,R,N,B,Q,K,P) ;
-        /*coutBitSet(forbCstlL);
-        coutBitSet(forbCstlS);
-        coutBitSet(forbcstlL);
-        coutBitSet(forbcstlS);
-        std::cin >> nothing ;*/
+
+
 
 
         if (!(moveNb%2)){std::cout << "white " ;} else {std::cout << "black " ;}std::cout << "to play" << std::endl;
@@ -143,6 +149,7 @@ void Game(int depth1, int depth2){
         if (!(moveNb%2)){
 
             if (whiteHuman){
+
                 legal = false ;
 
                 legPaW(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
@@ -190,6 +197,10 @@ void Game(int depth1, int depth2){
                     }
                 }
             } else { // white not human
+
+                variante.clear() ;
+                tempVariante.clear() ;
+
                 legPaW(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
                 sliderD(moves, B, whitePieces, occupied) ;
                 sliderCD(moves, B, whitePieces, occupied) ;
@@ -317,10 +328,13 @@ void Game(int depth1, int depth2){
 
 
 
-                    thisEval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,forbCstlS,forbCstlL,tempForbcstlS,tempForbcstlL,depthInit,depth1,depth2,-GAMEintINFINITY,GAMEintINFINITY,false) ;
+                    thisEval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,forbCstlS,forbCstlL,tempForbcstlS,tempForbcstlL, tempVariante, depthInit,depth1,depth2,-GAMEintINFINITY,GAMEintINFINITY,false) ;
                     //std::cout << thisEval << std::endl ;
 
                     if (thisEval > bestEval){
+                        variante = {position, destination} ;
+                        variante.resize(2) ;
+                        variante.insert(variante.end(), tempVariante.begin(), tempVariante.end() ) ;
                         bestInd = 2*semIdx ;
                         bestEval = thisEval ;
                     }
@@ -335,6 +349,7 @@ void Game(int depth1, int depth2){
 
 
                 }
+                //std::cin >> nothing ;
 
                 for (int semIdx = 0 ; semIdx < moves.size()/2 ; semIdx++){
                     if (2*semIdx == bestInd) {
@@ -418,6 +433,9 @@ void Game(int depth1, int depth2){
             }
             }
             } else { //black not human
+                variante.clear();
+                tempVariante.clear();
+
                 legPaB(moves, p, whitePieces, blackPieces, occupied, enPassant) ;
                 KnightMoves(moves, n, blackPieces) ;
                 sliderD(moves, b, blackPieces, occupied) ;
@@ -540,7 +558,7 @@ void Game(int depth1, int depth2){
 
 
 
-                    thisEval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,forbcstlS,forbcstlL,depthInit,depth1,depth2,-GAMEintINFINITY,GAMEintINFINITY,true) ;
+                    thisEval = minimax(r,n,b,q,k,p,R,N,B,Q,K,P,CstlL,CstlS,cstlL,cstlS,enPassant,tempForbCstlS,tempForbCstlL,forbcstlS,forbcstlL, tempVariante, depthInit,depth1,depth2,-GAMEintINFINITY,GAMEintINFINITY,true) ;
 
 
                     //show moves :
@@ -548,6 +566,9 @@ void Game(int depth1, int depth2){
 
 
                     if (thisEval < bestEval){
+                        variante = {position, destination} ;
+                        variante.insert(variante.end(), tempVariante.begin(), tempVariante.end() ) ;
+
                         bestInd = 2*semIdx ;
                         bestEval = thisEval ;
                     }

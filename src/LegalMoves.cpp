@@ -939,9 +939,8 @@ void KnightMoves2(std::vector<int>& moves, unsigned long long int piece, unsigne
 }
 
 
-void KingMoves2(std::vector<int>& moves, unsigned long long int piece,unsigned long long int rook,
-         unsigned long long int allyPieces, unsigned long long int occupied,
-         bool CstlL, bool CstlS, bool cstlL, bool cstlS){
+void KingMoves2(std::vector<int>& moves, unsigned long long int piece,
+         unsigned long long int allyPieces, unsigned long long int occupied){
 
     unsigned long long int king ;
     unsigned long long int Nmove ;
@@ -1003,6 +1002,63 @@ void KingMoves2(std::vector<int>& moves, unsigned long long int piece,unsigned l
                 }
             }
             break ;
+        }
+    }
+}
+
+
+bool isCheck(unsigned long long int r,unsigned long long int n,unsigned long long int b, unsigned long long int q,
+             unsigned long long int k,unsigned long long int p,unsigned long long int R, unsigned long long int N,
+             unsigned long long int B, unsigned long long int Q,unsigned long long int K, unsigned long long int P,
+             unsigned long long int whitePieces, unsigned long long int blackPieces, unsigned long long int occupied,
+             unsigned long long int enPassant, bool whiteTurn){
+
+    std::vector<int> moves ;
+
+    if (whiteTurn){
+
+        legPaB2(moves, p, whitePieces, blackPieces, occupied, enPassant) ;
+        KnightMoves2(moves, n, occupied, blackPieces) ;
+        sliderD2(moves, b, blackPieces, occupied) ;
+        sliderCD2(moves, b, blackPieces, occupied) ;
+        sliderHV2(moves, q, blackPieces, occupied) ;
+        sliderD2(moves, q, blackPieces, occupied) ;
+        sliderCD2(moves, q, blackPieces, occupied) ;
+        sliderHV2(moves, r, blackPieces, occupied) ;
+        KingMoves2(moves, k, blackPieces, occupied) ;
+
+        for (int sq = 0 ; sq < 64 ; sq++ ){ // optimisable
+            if ((k>>sq)&1){
+                for (int movInd = 0 ; movInd < moves.size()/2 ; movInd++){
+                    if (sq = moves[2*movInd+1]) {
+                        return true ;
+                    }
+                }
+                return false ;
+            }
+        }
+
+    } else { // black turn
+
+        legPaW2(moves, P, whitePieces, blackPieces, occupied, enPassant) ;
+        sliderHV2(moves, R, whitePieces, occupied) ;
+        sliderHV2(moves, Q, whitePieces, occupied) ;
+        sliderD2(moves, B, whitePieces, occupied) ;
+        sliderCD2(moves, B, whitePieces, occupied) ;
+        sliderD2(moves, Q, whitePieces, occupied) ;
+        sliderCD2(moves, Q, whitePieces, occupied) ;
+        KnightMoves2(moves, N, occupied, whitePieces) ;
+        KingMoves2(moves, K, whitePieces, occupied) ;
+
+        for (int sq = 0 ; sq < 64 ; sq++ ){ // optimisable
+            if ((k>>sq)&1){
+                for (int movInd = 0 ; movInd < moves.size()/2 ; movInd++){
+                    if (sq = moves[2*movInd+1]) {
+                        return true ;
+                    }
+                }
+                return false ;
+            }
         }
     }
 }

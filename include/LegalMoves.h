@@ -53,9 +53,14 @@ void sliderCD2 (std::vector<int>& moves, unsigned long long int piece,
 void KnightMoves2(std::vector<int>& moves, unsigned long long int piece, unsigned long long int occupied,
          unsigned long long int allyPieces);
 
-void KingMoves2(std::vector<int>& moves, unsigned long long int piece, unsigned long long int rook,
-         unsigned long long int allyPieces, unsigned long long int occupied, bool CstlL, bool CstlS, bool cstlL, bool cstlS);
+void KingMoves2(std::vector<int>& moves, unsigned long long int piece,
+         unsigned long long int allyPieces, unsigned long long int occupied);
 
+bool isCheck(unsigned long long int r,unsigned long long int n,unsigned long long int b, unsigned long long int q,
+             unsigned long long int k,unsigned long long int p,unsigned long long int R, unsigned long long int N,
+             unsigned long long int B, unsigned long long int Q,unsigned long long int K, unsigned long long int P,
+             unsigned long long int whitePieces, unsigned long long int blackPieces, unsigned long long int occupied,
+             unsigned long long int enPassant, bool whiteTurn);
 
 
 #endif // LEGALMOVES_H
